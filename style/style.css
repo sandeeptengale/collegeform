@@ -1,0 +1,17 @@
+#body-frag {
+    background-image: url("/college/images/bubble.png");
+    background-repeat: repeat;
+}
+
+#student-header {
+    color: brown;
+}
+
+#header-text {
+    text-align: center;
+}
+
+#formStatus {
+    text-align: center;
+    color: green;
+}

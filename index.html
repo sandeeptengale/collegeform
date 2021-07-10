@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <script src="https://code.angularjs.org/1.6.9/angular-route.js"></script>
+    <script src="https://code.angularjs.org/1.6.9/angular.min.js"></script>
+    <script src="https://code.angularjs.org/1.6.9/angular.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style/style.css" />
+    <meta chrset="UTF 8">
+    <title>Student Registeration form</title>
+</head>
+
+<body id="body-frag" ng-app="studentApp">
+    <div id="student-header">
+        <h2 id="header-text">SRTTC College of Engineering</h2>
+        <h3 id="header-text">Student Registeration Form</h3>
+    </div>
+    <hr/>
+    <div id="form-frag" ng-controller="StudentController">
+        <form class="form-horizontal" ng-submit="submitStudnetForm()" role="form">
+            <p id="formStatus"></p>
+            <div class="form-group">
+                <label for="firstName" class="col-sm-3 control-label">First Name</label>
+                <div class="col-sm-6">
+                    <input type="text" id="firstName" class="form-control" ng-model="student.firstName" />
+                </div>
+                <div class="col-sm-3"></div>
+            </div>
+            <div class="form-group">
+                <label for="lastName" class="col-sm-3 control-label">Last Name</label>
+                <div class="col-sm-6">
+                    <input type="text" id="lastName" class="form-control" ng-model="student.lastName" />
+                </div>
+                <div class="col-sm-3"></div>
+            </div>
+            <div class="form-group">
+                <label for="dob" class="col-sm-3 control-label">DoB</label>
+                <div class="col-sm-2">
+                    <input type="date" id="dob" class="form-control" ng-model="student.DoB" />
+                </div>
+                <div class="col-sm-7"></div>
+            </div>
+            <div class="form-group">
+                <label for="gender" class="col-sm-3 control-label">Gender</label>
+                <div class="col-sm-2">
+                    <select id="gender" class="form-control" ng-model="student.gender">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="col-sm-7"></div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-2">
+                    <span><b>Training Location</b></span>
+                    <div class="radio">
+                        <label><input value="online" type="radio" name="training"
+                                ng-model="student.trainingType" />Online</label>
+                    </div>
+                    <div class="radio">
+                        <label><input value="onsite" type="radio" name="training"
+                                ng-model="student.trainingType" />OnSite</label>
+                    </div>
+                </div>
+                <div class="col-sm-7">
+                    <span><b>Main Subjects</b></span>
+                    <div class="checkbox">
+                        <label><input type="checkbox" ng-model="student.maths" />Maths</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" ng-model="student.physics" />Physics</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" ng-model="student.chemistry" />Chemistry</label>
+                    </div>
+                </div>
+            </div>
+            <input type="Save" value="Save" ng-click="submitStudnetForm()" class="btn btn-primary col-sm-offset-3" />
+            <input type="reset" value="Reset" ng-click="resetForm()" class="btn" /> <br />
+        </form>
+    </div>
+    <script>
+        var studentApp = angular.module("studentApp", []);
+        studentApp.controller("StudentController", function($scope, $http) {
+            $scope.submitStudnetForm = function() {
+                if ($scope.student.firstName == undefined || $scope.student.lastName == undefined || $scope.student.gender == undefined) {
+                    document.getElementById("formStatus").textContent = "Please pass all the fields.";
+                    return;
+                }
+                $http({
+                    method: "post",
+                    url: "http://localhost/college/upload.php",
+                    data: {
+                        firstName: $scope.student.firstName,
+                        lastName: $scope.student.lastName,
+                        dob: $scope.student.DoB,
+                        gender: $scope.student.gender,
+                        trainingType: $scope.student.trainingType,
+                        maths: $scope.student.maths,
+                        physics: $scope.student.physics,
+                        chemistry: $scope.student.chemistry
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                }).then(function(response) {
+                    document.getElementById("formStatus").textContent = "Student data is successfully updated.";
+                }, function(error) {
+                    +error.response
+                    document.getElementById("formStatus").textContent = "Error updating the data.";
+                });
+            }
+
+            $scope.resetForm = function() {
+
+            }
+        });
+    </script>
+</body>
+
+</html>
